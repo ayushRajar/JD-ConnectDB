@@ -3,15 +3,33 @@ import java.util.*;
 import model.Student;
 import model.Course;
 
+/**
+ * CollectionManager manages a Java collection of Student or Course objects,
+ * synchronizing it with the database and supporting different collection types.
+ * @param <T> The type of object managed (Student or Course)
+ */
 public class CollectionManager<T> {
+    /** The underlying Java collection (ArrayList, Stack, etc.) */
     private Collection<T> collection;
+    /** The name of the database table ("STUDENT" or "COURSE") */
     private String tableName;
 
+    /**
+     * Constructs a CollectionManager for the given collection type and table.
+     * @param collectionType The type of collection (ArrayList, Stack, etc.)
+     * @param tableName The database table name
+     */
     public CollectionManager(String collectionType, String tableName) {
         this.tableName = tableName;
         this.collection = createCollection(collectionType);
     }
 
+    /**
+     * Creates a new collection instance based on the type and table.
+     * For TreeSet, uses a comparator to sort by score (Student) or credits (Course).
+     * @param type The collection type
+     * @return The new collection
+     */
     private Collection<T> createCollection(String type) {
         if (type.equals("TreeSet")) {
             if (tableName.equals("STUDENT")) {
@@ -42,16 +60,28 @@ public class CollectionManager<T> {
         };
     }
 
+    /**
+     * Switches the current collection to a new type, preserving the data.
+     * @param newType The new collection type
+     */
     public void switchCollection(String newType) {
         Collection<T> newCollection = createCollection(newType);
         newCollection.addAll(this.collection);
         this.collection = newCollection;
     }
 
+    /**
+     * Returns the current collection.
+     * @return The collection
+     */
     public Collection<T> getCollection() {
         return collection;
     }
 
+    /**
+     * Loads all records from the database into the collection, preserving the semantics
+     * of the collection type (Stack, Queue, TreeSet, etc.).
+     */
     public void clearAndLoadFromDB() {
         collection.clear();
         List<T> tempList = new ArrayList<>();
@@ -105,6 +135,10 @@ public class CollectionManager<T> {
         }
     }
 
+    /**
+     * Adds a record to the collection and inserts it into the database.
+     * @param obj The object to add
+     */
     public void addToDBAndCollection(T obj) {
         collection.add(obj);
         try (Connection conn = DatabaseManager.getConnection()) {
@@ -134,6 +168,10 @@ public class CollectionManager<T> {
         }
     }
 
+    /**
+     * Deletes a record from the collection and the database by its identifier (id).
+     * @param identifier The id of the record to delete
+     */
     public void deleteFromDBAndCollection(int identifier) {
         collection.removeIf(obj -> {
             if (tableName.equals("STUDENT")) {

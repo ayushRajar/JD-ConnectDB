@@ -6,18 +6,33 @@ import model.Course;
 import java.awt.*;
 import java.util.Collection;
 
+/**
+ * MainFrame is the main GUI window for the Database Collection Manager application.
+ * It allows users to view, add, and delete Student and Course records using various Java collections.
+ */
 public class MainFrame extends JFrame {
+    /** Dropdown for selecting the table (STUDENT or COURSE) */
     private JComboBox<String> tableSelector;
+    /** Dropdown for selecting the collection type */
     private JComboBox<String> collectionSelector;
+    /** Array of text fields for data entry (excluding auto-generated ID) */
     private JTextField[] dataFields;
+    /** Table for displaying records */
     private JTable dataTable;
+    /** Table model for managing table data */
     private DefaultTableModel tableModel;
 
+    /** Table options */
     private static final String[] TABLES = {"STUDENT", "COURSE"};
+    /** Collection options */
     private static final String[] COLLECTIONS = {"ArrayList", "LinkedList", "Stack", "Queue", "HashSet", "TreeSet"};
 
+    /** Manages the current collection and DB sync */
     private CollectionManager<? extends Object> collectionManager;
 
+    /**
+     * Constructs the main application window, sets up GUI components and listeners.
+     */
     public MainFrame() {
         setTitle("Database Collection Manager");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -116,6 +131,10 @@ public class MainFrame extends JFrame {
         setupCollectionManager();
     }
 
+    /**
+     * Initializes the collection manager based on the selected table and collection.
+     * Loads data from the database into the collection and updates the display.
+     */
     private void setupCollectionManager() {
         String table = (String) tableSelector.getSelectedItem();
         String collection = (String) collectionSelector.getSelectedItem();
@@ -128,6 +147,11 @@ public class MainFrame extends JFrame {
         displayData();
     }
 
+    /**
+     * Updates the data entry fields panel based on the selected table.
+     * @param table The selected table (STUDENT or COURSE)
+     * @param panel The panel to update
+     */
     private void updateDataFields(String table, JPanel panel) {
         panel.removeAll();
         panel.setLayout(new GridBagLayout());
@@ -182,6 +206,10 @@ public class MainFrame extends JFrame {
         panel.repaint();
     }
 
+    /**
+     * Adds a new record to the database and collection based on user input.
+     * Handles both Student and Course records.
+     */
     @SuppressWarnings("unchecked")
     private void addRecord() {
         String table = (String) tableSelector.getSelectedItem();
@@ -212,6 +240,10 @@ public class MainFrame extends JFrame {
         }
     }
 
+    /**
+     * Deletes the selected record from the database and collection.
+     * Prompts the user if no row is selected.
+     */
     private void deleteRecord() {
         int selectedRow = dataTable.getSelectedRow();
         if (selectedRow == -1) {
@@ -233,6 +265,9 @@ public class MainFrame extends JFrame {
         displayData();
     }
 
+    /**
+     * Displays the current collection data in the table, using the correct column headers.
+     */
     private void displayData() {
         String table = (String) tableSelector.getSelectedItem();
         collectionManager.clearAndLoadFromDB();
@@ -255,6 +290,9 @@ public class MainFrame extends JFrame {
         }
     }
 
+    /**
+     * Main entry point. Initializes the database and launches the GUI.
+     */
     public static void main(String[] args) {
         // Initialize DB
         DatabaseManager.initializeDatabase();
