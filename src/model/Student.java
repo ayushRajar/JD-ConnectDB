@@ -1,3 +1,3 @@
 package model;
 
-public record Student(int usn, String name, float score, char grade, boolean active) {}
+public record Student(int id, String name, float score, char grade, boolean active) {}

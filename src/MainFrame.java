@@ -142,9 +142,9 @@ public class MainFrame extends JFrame {
         Color fieldBg = new Color(255, 255, 255);
         Color fieldFg = new Color(0, 51, 102);
         if (table.equals("STUDENT")) {
-            dataFields = new JTextField[5];
-            String[] labels = {"USN (int)", "Name (String)", "Score (float)", "Grade (char)", "Active (boolean)"};
-            for (int i = 0; i < 5; i++) {
+            dataFields = new JTextField[4];
+            String[] labels = {"Name (String)", "Score (float)", "Grade (char)", "Active (boolean)"};
+            for (int i = 0; i < 4; i++) {
                 gbc.gridx = 0;
                 gbc.gridy = i;
                 JLabel lbl = new JLabel(labels[i]);
@@ -160,9 +160,9 @@ public class MainFrame extends JFrame {
                 panel.add(dataFields[i], gbc);
             }
         } else {
-            dataFields = new JTextField[5];
-            String[] labels = {"Course Code (int)", "Title (String)", "Credits (float)", "Section (char)", "Available (boolean)"};
-            for (int i = 0; i < 5; i++) {
+            dataFields = new JTextField[4];
+            String[] labels = {"Title (String)", "Credits (float)", "Section (char)", "Available (boolean)"};
+            for (int i = 0; i < 4; i++) {
                 gbc.gridx = 0;
                 gbc.gridy = i;
                 JLabel lbl = new JLabel(labels[i]);
@@ -187,27 +187,25 @@ public class MainFrame extends JFrame {
         String table = (String) tableSelector.getSelectedItem();
         try {
             if ("STUDENT".equals(table)) {
-                int usn = Integer.parseInt(dataFields[0].getText());
-                String name = dataFields[1].getText();
-                float score = Float.parseFloat(dataFields[2].getText());
-                char grade = dataFields[3].getText().charAt(0);
-                boolean active = Boolean.parseBoolean(dataFields[4].getText());
-                Student s = new Student(usn, name, score, grade, active);
+                String name = dataFields[0].getText();
+                float score = Float.parseFloat(dataFields[1].getText());
+                char grade = dataFields[2].getText().charAt(0);
+                boolean active = Boolean.parseBoolean(dataFields[3].getText());
+                Student s = new Student(0, name, score, grade, active); // id is auto
                 ((CollectionManager<Student>) collectionManager).addToDBAndCollection(s);
             } else {
-                int courseCode = Integer.parseInt(dataFields[0].getText());
-                String title = dataFields[1].getText();
-                float credits = Float.parseFloat(dataFields[2].getText());
-                char section = dataFields[3].getText().charAt(0);
-                boolean available = Boolean.parseBoolean(dataFields[4].getText());
-                Course c = new Course(courseCode, title, credits, section, available);
+                String title = dataFields[0].getText();
+                float credits = Float.parseFloat(dataFields[1].getText());
+                char section = dataFields[2].getText().charAt(0);
+                boolean available = Boolean.parseBoolean(dataFields[3].getText());
+                Course c = new Course(0, title, credits, section, available); // id is auto
                 ((CollectionManager<Course>) collectionManager).addToDBAndCollection(c);
             }
             collectionManager.clearAndLoadFromDB();
             displayData();
             // Clear all data fields after adding
-            for (JTextField field : dataFields) {
-                field.setText("");
+            for (int i = 0; i < dataFields.length; i++) {
+                dataFields[i].setText("");
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Invalid input: " + ex.getMessage());
@@ -241,18 +239,18 @@ public class MainFrame extends JFrame {
         Collection<?> data = collectionManager.getCollection();
 
         if ("STUDENT".equals(table)) {
-            tableModel.setColumnIdentifiers(new String[]{"USN", "Name", "Score", "Grade", "Active"});
+            tableModel.setColumnIdentifiers(new String[]{"ID", "Name", "Score", "Grade", "Active"});
             tableModel.setRowCount(0);
             for (Object obj : data) {
                 Student s = (Student) obj;
-                tableModel.addRow(new Object[]{s.usn(), s.name(), s.score(), s.grade(), s.active()});
+                tableModel.addRow(new Object[]{s.id(), s.name(), s.score(), s.grade(), s.active()});
             }
         } else {
-            tableModel.setColumnIdentifiers(new String[]{"Course Code", "Title", "Credits", "Section", "Available"});
+            tableModel.setColumnIdentifiers(new String[]{"ID", "Title", "Credits", "Section", "Available"});
             tableModel.setRowCount(0);
             for (Object obj : data) {
                 Course c = (Course) obj;
-                tableModel.addRow(new Object[]{c.courseCode(), c.title(), c.credits(), c.section(), c.available()});
+                tableModel.addRow(new Object[]{c.id(), c.title(), c.credits(), c.section(), c.available()});
             }
         }
     }

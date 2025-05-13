@@ -14,11 +14,10 @@ public class DatabaseManager {
 
     public static void initializeDatabase() {
         try (Connection conn = getConnection(); Statement stmt = conn.createStatement()) {
-            // Create STUDENT table with unique usn
+            // Create STUDENT table
             String createStudentTable = """
                 CREATE TABLE IF NOT EXISTS STUDENT (
                     id INT PRIMARY KEY AUTO_INCREMENT,
-                    usn INT UNIQUE,
                     name VARCHAR(100),
                     score FLOAT,
                     grade CHAR(1),
@@ -27,11 +26,10 @@ public class DatabaseManager {
             """;
             stmt.executeUpdate(createStudentTable);
 
-            // Create COURSE table with unique courseCode
+            // Create COURSE table
             String createCourseTable = """
                 CREATE TABLE IF NOT EXISTS COURSE (
                     id INT PRIMARY KEY AUTO_INCREMENT,
-                    courseCode INT UNIQUE,
                     title VARCHAR(100),
                     credits FLOAT,
                     section CHAR(1),
