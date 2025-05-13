@@ -2,42 +2,21 @@ package Collect;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
-
-class Student {
-    String usn;
-    String name;
-    int age;
-    int sem;
-    float cgpa;
-
-        public Student(String usn, String name, int age, int sem, float cgpa) {
-            this.usn = usn;
-            this.name = name;
-            this.age = age;
-            this.sem = sem;
-            this.cgpa = cgpa;
-        }
-
-        @Override
-        public String toString() {
-            return usn + " - " + name + " - Age: " + age + ", Sem: " + sem + ", CGPA: " + cgpa;
-        }
-    }
-
+import model.Student;
 
 public class Arraylist {
     public static void addArrayList(ResultSet rs){
-            ArrayList<Student> studentList= new ArrayList<>();
-            try{
-                while (rs.next()) {
-                    String usn = rs.getString("USN");
-                    String name = rs.getString("Name");
-                    int age = rs.getInt("Age");
-                    int sem = rs.getInt("Sem");
-                    float cgpa = rs.getFloat("CGPA");
+        ArrayList<Student> studentList= new ArrayList<>();
+        try{
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                float score = rs.getFloat("score");
+                char grade = rs.getString("grade").charAt(0);
+                boolean active = rs.getBoolean("active");
 
-                    Student s = new Student(usn, name, age, sem, cgpa);
-                    studentList.add(s);
+                Student s = new Student(id, name, score, grade, active);
+                studentList.add(s);
             }
 
             // Display the student list
@@ -51,5 +30,4 @@ public class Arraylist {
             e.printStackTrace();
         } 
     }
-    
 }

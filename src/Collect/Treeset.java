@@ -3,45 +3,36 @@ package Collect;
 import java.sql.ResultSet;
 import java.util.Comparator;
 import java.util.TreeSet;
-class studentComp implements Comparator{
-    public int compare(Object o1,Object o2){
-        Student s1 = (Student)o1;
-        Student s2 = (Student)o2;
+import model.Student;
 
-        if(s1.cgpa > s2.cgpa){
-            return 1;
-        }else{
-            return -1;
-        }
+class studentComp implements Comparator<Student> {
+    public int compare(Student s1, Student s2){
+        return Float.compare(s1.score(), s2.score());
     }
 }
 
 public class Treeset {
     public static void addTreeSet(ResultSet rs){
         TreeSet<Student> studentSet = new TreeSet<>(new studentComp());
-        
         try{
-                while (rs.next()) {
-                    String usn = rs.getString("USN");
-                    String name = rs.getString("Name");
-                    int age = rs.getInt("Age");
-                    int sem = rs.getInt("Sem");
-                    float cgpa = rs.getFloat("CGPA");
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                float score = rs.getFloat("score");
+                char grade = rs.getString("grade").charAt(0);
+                boolean active = rs.getBoolean("active");
 
-                    Student s = new Student(usn, name, age, sem, cgpa);
-                    studentSet.add(s);
+                Student s = new Student(id, name, score, grade, active);
+                studentSet.add(s);
             }
-
             // Display the student list
             System.out.println("The TreeSet Collection for the Data are as follows : ");
             System.out.println(studentSet.getClass().getName());
             for (Student s : studentSet) {
                 System.out.println(s);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }
