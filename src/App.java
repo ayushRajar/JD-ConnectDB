@@ -28,7 +28,7 @@ public class App {
         // user: Username for the MySQL database. Used for DB connection in main(). Type: String
         String user = "root";
         // password: Password for the MySQL database. Used for DB connection in main(). Type: String
-        String password = "@helloSql";
+        String password = "";
         // sc: Scanner for reading user input from the console. Used in main() for menu selection. Type: Scanner
         Scanner sc = new Scanner(System.in);
 
